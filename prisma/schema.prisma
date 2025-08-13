@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Question {
+  id          String       @id @default(uuid())
+  text        String
+  step_number Int          @default(autoincrement())
+  answers     Answer[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  UserAnswer  UserAnswer[]
+}
+
+model Answer {
+  id         String       @id @default(uuid())
+  text       String
+  isCorrect  Boolean
+  question   Question     @relation(fields: [questionId], references: [id],onDelete: Cascade)
+  questionId String
+  UserAnswer UserAnswer[]
+}
+
+model User {
+  id          String       @id @default(uuid())
+  name        String?
+  email       String       @unique
+  username    String       @unique
+  isBlocked   Boolean      @default(false)
+  password    String
+  role        Role         @default(USER)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  userAnswers UserAnswer[]
+}
+
+model UserAnswer {
+  id         String   @id @default(uuid())
+  isTrue     Boolean
+  user       User     @relation(fields: [userId], references: [id],onDelete: Cascade)
+  userId     String
+  question   Question @relation(fields: [questionId], references: [id],onDelete: Cascade)
+  questionId String
+  answer     Answer   @relation(fields: [answerId], references: [id],onDelete: Cascade)
+  answerId   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
+}
