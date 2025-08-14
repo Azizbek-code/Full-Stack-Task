@@ -23,8 +23,11 @@ export class QuestionController {
   }
 
   @Get('/get')
-  findAll(@Query('step_number') step_number:number) {
-    return this.questionService.getQuestion(step_number);
+  async findAll(@Query('step_number') step_number: string) {
+    
+    const data = await this.questionService.getQuestion(+step_number);
+    return data;
+    
   }
 
   @Patch(':id')

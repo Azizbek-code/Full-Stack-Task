@@ -11,9 +11,9 @@ export class UseranswerController {
 
   @Post('/answer')
   @UseGuards(JwtGuard)
-  async create(@Body() createUseranswerDto: CreateUseranswerDto) {
+  async create(@Body() createUseranswerDto: CreateUseranswerDto, @GetUserId() userId: string) {
     try {
-      const data = await this.useranswerService.create(createUseranswerDto)
+      const data = await this.useranswerService.create(createUseranswerDto,userId)
       return data
     } catch (error) {
       throw new Error(error.message);

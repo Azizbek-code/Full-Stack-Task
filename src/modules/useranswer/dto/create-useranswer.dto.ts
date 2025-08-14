@@ -5,7 +5,5 @@ export class CreateUseranswerDto {
     questionId: string;
     @IsString()
     answerId: string
-    @IsString()
-    @IsOptional()
-    userId: string;
+
 }

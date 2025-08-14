@@ -3,7 +3,6 @@ import { Type } from "class-transformer";
 
 class AnswerDto {
     @IsString()
-    @Length(2, 4)
     text: string;
 
     @IsBoolean()

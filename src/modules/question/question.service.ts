@@ -34,30 +34,31 @@ export class QuestionService {
       throw new Error(error.message);
     }
   }
-
   async getQuestion(step_number: number) {
     try {
       const question = await this.db.prisma.question.findFirst({
-        where: {
-          step_number
-        },
+        where: { step_number: +step_number },
         include: {
-          answers: true,
-          _count: {
+          answers: {
             select: {
-              answers: true
+              id: true,
+              text: true,
+              isCorrect: true
             }
           }
         }
-      })
-      if (!question) {
-        throw new Error('Question not found');
-      }
-      return question
-    } catch (error) {
+      });
 
+      if (!question) {
+        throw new Error(`Question with step_number ${step_number} not found`);
+      }
+      return question;
+    } catch (error) {
+      console.error('Error in getQuestion:', error);
+      throw error;
     }
   }
+
 
   async update(id: string, updateQuestionDto: UpdateQuestionDto) {
     try {

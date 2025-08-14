@@ -6,7 +6,7 @@ import { PrismaService } from 'src/core/database/prisma.service';
 export class UseranswerService {
   constructor(private db: PrismaService) { }
 
-  async create({ answerId, questionId, userId }: CreateUseranswerDto) {
+  async create({ answerId, questionId }: CreateUseranswerDto, userId:string) {
     try {
       const question = await this.db.prisma.question.findUnique({
         where: {
@@ -35,7 +35,7 @@ export class UseranswerService {
         }
       })
       return {
-        message: 'success',
+        message: 'success', 
       }
     } catch (error) {
       throw new Error(error.message)
